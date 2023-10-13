@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal</title>
+</head>
+<body>
+    <h1>Program.cs</h1>         
+      
+    
+    <p>
+      using System;
+      using System.Runtime.InteropServices;
+      using System.IO;
+      using System.Collections.Generic;
+      class Program
+      {
+          
+          static void Main(string[] args)
+          {
+              
+              int option = 0;
+              Console.WriteLine("Please select one of the following choices");
+              Console.WriteLine("1. Write.");
+              Console.WriteLine("2. Display.");
+              Console.WriteLine("3. Load.");
+              Console.WriteLine("4. Save.");
+              Console.WriteLine("5. Quit.");
+              Console.WriteLine("What would you like to do? ");
+              string stringOption = Console.ReadLine();
+              option = int.Parse(stringOption);
+                  
+              string [] array = new string[]{};
+              while (option != 5)
+              {
+                  
+                 
+                  
+                  if (option == 1)
+                  {
+                      
+                      //The entry is saved with the current date.
+                      JournalPrompt journal1 = new JournalPrompt();
+                      string prompted = journal1.RandomPrompt();
+                      Console.WriteLine(prompted);
+                      string contentUser = Console.ReadLine();
+                      JournalEntry entry1 = new JournalEntry();
+                      string journalLine = entry1.GetContent(prompted, contentUser);
+                      array = array.Append(journalLine).ToArray();
+                      Console.WriteLine("Please select one of the following choices");
+                      Console.WriteLine("1. Write.");
+                      Console.WriteLine("2. Display.");
+                      Console.WriteLine("3. Load.");
+                      Console.WriteLine("4. Save.");
+                      Console.WriteLine("5. Quit.");
+                      Console.WriteLine("What would you like to do? ");
+                      stringOption = Console.ReadLine();
+                      option = int.Parse(stringOption);
+                  }
+                  else if (option == 2)
+                  {
+                      
+                      DisplayJournal display1 = new DisplayJournal();
+                      display1.DisplayEntries(array);
+                      Console.WriteLine("Please select one of the following choices");
+                      Console.WriteLine("1. Write.");
+                      Console.WriteLine("2. Display.");
+                      Console.WriteLine("3. Load.");
+                      Console.WriteLine("4. Save.");
+                      Console.WriteLine("5. Quit.");
+                      Console.WriteLine("What would you like to do? ");
+                      stringOption = Console.ReadLine();
+                      option = int.Parse(stringOption);
+                  }
+                  else if (option == 3)
+                  {
+                      
+                      Console.Write("What is the name of the Journal file ");
+                      string nameOfFile = Console.ReadLine();
+                      LoadJournal load1 = new LoadJournal();
+                      load1.LoadFile(nameOfFile);
+                      Console.WriteLine("Please select one of the following choices");
+                      Console.WriteLine("1. Write.");
+                      Console.WriteLine("2. Display.");
+                      Console.WriteLine("3. Load.");
+                      Console.WriteLine("4. Save.");
+                      Console.WriteLine("5. Quit.");
+                      Console.WriteLine("What would you like to do? ");
+                      stringOption = Console.ReadLine();
+                      option = int.Parse(stringOption);
+                  }
+                  else if (option == 4)
+                  {
+                      //The entries are saved to a file.
+                      Console.Write("What is the name of the Journal file ");
+                      string nameOfFileUser = Console.ReadLine();
+                      SaveJournal save1 = new SaveJournal();
+                      save1.Save(nameOfFileUser, array);
+                      Console.WriteLine($"File saved as {nameOfFileUser}");
+                      Console.WriteLine("Please select one of the following choices");
+                      Console.WriteLine("1. Write.");
+                      Console.WriteLine("2. Display.");
+                      Console.WriteLine("3. Load.");
+                      Console.WriteLine("4. Save.");
+                      Console.WriteLine("5. Quit.");
+                      Console.WriteLine("What would you like to do? ");
+                      stringOption = Console.ReadLine();
+                      option = int.Parse(stringOption);
+                  }
+                  else if (option != 5)
+                  {
+                      Console.WriteLine("This is not a valid option, please try again");
+                      Console.WriteLine("Please select one of the following choices");
+                      Console.WriteLine("1. Write.");
+                      Console.WriteLine("2. Display.");
+                      Console.WriteLine("3. Load.");
+                      Console.WriteLine("4. Save.");
+                      Console.WriteLine("5. Quit.");
+                      Console.WriteLine("What would you like to do? ");
+                      stringOption = Console.ReadLine();
+                      option = int.Parse(stringOption);
+                  }
+              }
+              Console.WriteLine("Until the next entry!");
+          }
+      }
+    </p>
+    <h2>DisplayJournal.cs</h2>
+    <p>using System;
+    
+    
+        public class DisplayJournal
+        {
+            public string []  _entries = {};
+            public void DisplayEntries(string [] entries)
+            {
+                foreach (string element in entries)
+                {
+                    Console.WriteLine(element);
+                }
+            }
+        }
+    </p>
+    <h3>JournalEntry.cs</h3>
+    <p>
+      using System;
+      using System.Collections.Generic;
+      using System.Globalization;
+            public class  JournalEntry
+          
+              {
+                  
+                  public string _date = DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                  
+                  
+                  
+                  public string GetContent(string prompt, string content)
+                  {
+                      
+                      string contentLine = $"Date: {_date} \nPrompt: {prompt} \n{content}";
+                      return contentLine;
+                      
+                      
+                      
+                  }
+              }
+              
+          
+    </p>
+    <h4>JournalPrompt.cs</h4>
+    <p>
+      using System;
+      using System.Reflection.Metadata.Ecma335;
+      
+      public class  JournalPrompt
+      
+          {
+              public string[] _promtText = {"How was the most interesting person with you talked today?", "How you tried to be closer to the Lord today?", "How you feel the love of God today?", "What was the most funny thing that happend to you today?", "How you shared time with your family today?"};
+              public string RandomPrompt()
+              {
+                  Random prompt = new Random();
+                  int index = prompt.Next(_promtText.Length);
+                  string promptShow = _promtText[index];
+                  return promptShow;
+              }
+              
+          }
+    </p>
+    <h5>LoadJournal</h5>
+    <p>
+      using System;
+      using System.IO;
+      public class LoadJournal
+      {
+        
+        public void LoadFile( string filename) 
+        {
+            
+            string[] lines = System.IO.File.ReadAllLines(filename);
+            foreach (string line in lines)
+            {
+                Console.WriteLine(line);
+            }
+        }
+      }
+    </p>
+    <h6>SaveJournal.cs</h6>
+    <p>
+      using System;
+      using System.Diagnostics.Contracts;
+      using System.IO;
+      public class SaveJournal
+      {
+        
+        public void Save(string fileName, string[] array)
+        {
+            using (StreamWriter outputFile = new StreamWriter(fileName))
+            {
+                foreach (string line in array)
+                {
+                    outputFile.WriteLine(line);
+                }
+            }
+        }
+      }
+    </p>
+
+
+</body>
+</html>
